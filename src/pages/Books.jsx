@@ -19,7 +19,12 @@ class Books extends Component {
     this.state = {
       books: books
     };
+    this.inputLivroRef = React.createRef();
   }
+
+  handleClickBuscar = () => {
+    console.log('Valor do filtro de busca por livro: ', this.inputLivroRef.current.value);
+  };
 
   render() {
     const booksData = this.state.books;
@@ -38,9 +43,12 @@ class Books extends Component {
           </Col>
           <Col md={{ span: "8" }}>
             <InputGroup size={"lg"}>
-              <FormControl placeholder="Busque livros pelo título, autor ou ISBN" />
+              <FormControl
+                placeholder="Busque livros pelo título, autor ou ISBN"
+                ref={this.inputLivroRef}
+              />
               <InputGroup.Append>
-                <Button>Buscar</Button>
+                <Button onClick={() => this.handleClickBuscar()}>Buscar</Button>
               </InputGroup.Append>
             </InputGroup>
           </Col>
