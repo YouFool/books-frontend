@@ -26,7 +26,7 @@ const TableBody = props => {
           <td>{livro.publisher}</td>
           <td>{livro.year}</td>
           <td>
-            <button>Delete</button>
+            <button>Detalhes</button>
           </td>
         </tr>
       );
