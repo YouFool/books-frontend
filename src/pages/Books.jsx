@@ -10,7 +10,6 @@ import {
   Card,
   CardImg
 } from "react-bootstrap";
-import { books } from "./mock";
 import { LIST_BOOKS } from "./booksService";
 import TablePagination from "../components/TablePagination";
 
@@ -18,7 +17,7 @@ class Books extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      books: books,
+      books: [],
       currentPage: 0,
       totalResults: 0
     };
@@ -26,7 +25,7 @@ class Books extends Component {
   }
 
   componentDidMount() {
-    this.loadBooks();
+    this.loadBooks("");
   }
 
   loadBooks = async (filter, page) => {
@@ -39,21 +38,19 @@ class Books extends Component {
 
   handleClickBuscar = () => {
     const filter = this.inputSearchBooksRef.current.value;
-    console.log("Valor do filtro de busca por livro: ", filter);
     this.loadBooks(filter, this.state.currentPage);
   };
 
   handleClickPagination = pageNumber => {
-    this.loadBooks(this.inputSearchBooksRef.current.value, pageNumber);
-    this.setState({ pageNumber: pageNumber++ });
+    const nextPage = Number(pageNumber) - 1;
+    this.loadBooks(this.inputSearchBooksRef.current.value, nextPage);
+    this.setState({ currentPage: nextPage });
   };
 
   render() {
     const { currentPage, totalResults, books } = this.state;
 
-    //TODO: Alinhar input para busca de livros
     //TODO: Criar filtro por ano de publicação com input date
-    //TODO: Modal ao clicar em 'detalhes'
     return (
       // <Spinner animation="border" variant="primary" />
       <Container fluid={true}>
@@ -64,22 +61,25 @@ class Books extends Component {
             </Card>
           </Col>
           <Col md={{ span: "8" }}>
-            <InputGroup size={"lg"}>
-              <FormControl
-                placeholder="Busque livros pelo título, autor ou ISBN"
-                ref={this.inputSearchBooksRef}
-              />
-              <InputGroup.Append>
-                <Button onClick={() => this.handleClickBuscar()}>Buscar</Button>
-              </InputGroup.Append>
-            </InputGroup>
+            <Card>
+              <Card.Body>
+                <InputGroup size={"lg"}>
+                  <FormControl
+                    placeholder="Busque livros pelo título, autor ou ISBN"
+                    ref={this.inputSearchBooksRef}
+                  />
+                  <InputGroup.Append>
+                    <Button onClick={() => this.handleClickBuscar()}>
+                      Buscar
+                    </Button>
+                  </InputGroup.Append>
+                </InputGroup>
+              </Card.Body>
+            </Card>
           </Col>
         </Row>
         <Row>
           <Col>
-            {/*<InputGroup size={"lg"}>*/}
-            {/*  <FormControl placeholder="Busque livros pelo título, autor ou ISBN" />*/}
-            {/*</InputGroup>*/}
             <h3>Filtrar ano de publicação: </h3>
           </Col>
           <Col>

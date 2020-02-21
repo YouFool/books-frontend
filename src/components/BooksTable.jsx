@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Table } from "react-bootstrap";
+import BookModal from "./BookModal";
 
 const TableHeader = () => {
   return (
@@ -17,6 +18,11 @@ const TableHeader = () => {
 
 const TableBody = props => {
   const rows = props.booksData;
+
+  if (!rows || rows.length === 0) {
+    return null;
+  }
+
   if (rows && rows.length) {
     const tableBody = rows.map(book => {
       return (
@@ -26,7 +32,9 @@ const TableBody = props => {
           <td>{book.publisher}</td>
           <td>{book.year}</td>
           <td>
-            <button>Detalhes</button>
+            <button onClick={() => props.handleShowModal(book)}>
+              Detalhes
+            </button>
           </td>
         </tr>
       );
@@ -36,11 +44,36 @@ const TableBody = props => {
 };
 
 class BooksTable extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isShowModal: false,
+      selectedBook: undefined
+    };
+  }
+
+  handleShowModal = book => {
+    this.setState({ isShowModal: !this.state.isShowModal, selectedBook: book });
+  };
+
+  handleCloseModal = () => {
+    this.setState({ isShowModal: false });
+  };
+
   render() {
+    console.log("table props", this.props);
     return (
-      <Table hover="true" /*variant="dark"*/>
+      <Table hover="true">
+        <BookModal
+          show={this.state.isShowModal}
+          book={this.state.selectedBook}
+          handleCloseModal={this.handleCloseModal}
+        />
         <TableHeader />
-        <TableBody booksData={this.props.booksData} />
+        <TableBody
+          booksData={this.props.booksData}
+          handleShowModal={this.handleShowModal}
+        />
       </Table>
     );
   }
