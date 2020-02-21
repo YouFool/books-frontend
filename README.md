@@ -34,7 +34,7 @@ Construir um mecanismo de busca de livros.
 
 Você deve possuir o NodeJS instalado em sua máquina
 
-- Primeiramente, configure e execute o [back-end](https://github.com/YouFool/openweather-api) da aplicação
+- Primeiramente, configure e execute o [back-end](https://github.com/YouFool/books-api) da aplicação
 - Clone este projeto via `https://github.com/YouFool/books-frontend.git`
 - Entre no repositório clonado via `cd books-frontend/`
 - Execute o comando `npm start`
