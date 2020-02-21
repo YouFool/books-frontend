@@ -12,6 +12,7 @@ import {
 } from "react-bootstrap";
 import { LIST_BOOKS } from "./booksService";
 import TablePagination from "../components/TablePagination";
+import dayjs from "dayjs";
 
 class Books extends Component {
   constructor(props) {
@@ -22,14 +23,16 @@ class Books extends Component {
       totalResults: 0
     };
     this.inputSearchBooksRef = React.createRef();
+    this.inputStartDate = React.createRef();
+    this.inputEndDate = React.createRef();
   }
 
   componentDidMount() {
-    this.loadBooks("");
+    this.loadBooks("", 0, "", "");
   }
 
-  loadBooks = async (filter, page) => {
-    const result = await LIST_BOOKS(filter, page);
+  loadBooks = async (filter, page, startYear, endYear) => {
+    const result = await LIST_BOOKS(filter, page, startYear, endYear);
     const books = result.content;
     if (books && books.length) {
       this.setState({ books: books, totalResults: result.totalElements });
@@ -37,20 +40,33 @@ class Books extends Component {
   };
 
   handleClickBuscar = () => {
-    const filter = this.inputSearchBooksRef.current.value;
-    this.loadBooks(filter, this.state.currentPage);
+    const searchFilter = this.inputSearchBooksRef.current.value;
+    this.loadBooks(
+      searchFilter,
+      this.state.currentPage,
+      this.yearValueOrEmpty(this.inputStartDate.current.value),
+      this.yearValueOrEmpty(this.inputEndDate.current.value)
+    );
   };
+
+  yearValueOrEmpty(dateValue) {
+    return dateValue ? dayjs(dateValue).year() : "";
+  }
 
   handleClickPagination = pageNumber => {
     const nextPage = Number(pageNumber) - 1;
-    this.loadBooks(this.inputSearchBooksRef.current.value, nextPage);
+    this.loadBooks(
+      this.inputSearchBooksRef.current.value,
+      nextPage,
+      this.yearValueOrEmpty(this.inputStartDate.current.value),
+      this.yearValueOrEmpty(this.inputEndDate.current.value)
+    );
     this.setState({ currentPage: nextPage });
   };
 
   render() {
     const { currentPage, totalResults, books } = this.state;
 
-    //TODO: Criar filtro por ano de publicação com input date
     return (
       // <Spinner animation="border" variant="primary" />
       <Container fluid={true}>
@@ -84,12 +100,12 @@ class Books extends Component {
           </Col>
           <Col>
             <InputGroup>
-              <FormControl type={"date"} />
+              <FormControl type={"date"} ref={this.inputStartDate} />
             </InputGroup>
           </Col>
           <Col>
             <InputGroup>
-              <FormControl type={"date"} />
+              <FormControl type={"date"} ref={this.inputEndDate} />
             </InputGroup>
           </Col>
           <Col>

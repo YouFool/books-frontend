@@ -61,7 +61,6 @@ class BooksTable extends Component {
   };
 
   render() {
-    console.log("table props", this.props);
     return (
       <Table hover="true">
         <BookModal
