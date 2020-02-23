@@ -8,7 +8,8 @@ import {
   Button,
   FormControl,
   Card,
-  CardImg
+  CardImg,
+  Spinner
 } from "react-bootstrap";
 import { LIST_BOOKS } from "./booksService";
 import TablePagination from "../components/TablePagination";
@@ -68,7 +69,6 @@ class Books extends Component {
     const { currentPage, totalResults, books } = this.state;
 
     return (
-      // <Spinner animation="border" variant="primary" />
       <Container fluid={true}>
         <Row>
           <Col>
@@ -113,13 +113,29 @@ class Books extends Component {
           </Col>
         </Row>
         <br />
+        {this.renderTableContent(books, currentPage, totalResults)}
+      </Container>
+    );
+  }
+
+  renderTableContent(books, currentPage, totalResults) {
+    if (!books || books.length === 0) {
+      return (
+        <Container className={"text-center"}>
+          <Spinner animation="border" variant="primary" />
+        </Container>
+      );
+    }
+
+    return (
+      <>
         <BooksTable booksData={books} />
         <TablePagination
           currentPage={currentPage}
           totalResults={totalResults}
           onClickCallback={this.handleClickPagination}
         />
-      </Container>
+      </>
     );
   }
 }
